@@ -1,28 +1,62 @@
-# Inventory Management System (IMS)
+# Library Book Inventory Manager
 
-Week 1 deliverable for the Junior Java Developer Internship: **Project Planning and Architecture Design** for a simple Inventory Management System for a small retail business.
+Week 2 deliverable for the Junior Java Developer Internship - a menu-driven
+command-line Java application that manages a library's book inventory using
+in-memory Java collections.
 
-## 📄 Week 1 Deliverables (docs/)
+## Features
 
-| File | Description |
-|------|-------------|
-| `docs/Week1_Inventory_Management_System_Design_Document.docx` | Full design document (~2,000 words): requirements, module descriptions, 10 design patterns with rationale, database design, API endpoints, code scaffolding, testing strategy, and CI/CD plan |
-| `docs/architecture_diagram.png` | High-level layered architecture diagram (Controller → Service → Repository → MySQL, with Security & cross-cutting concerns) |
-| `docs/er_diagram.png` | Entity Relationship diagram for the normalized MySQL schema (products, categories, suppliers, stock_movements, orders, order_items, users, roles) |
+- Add a new book (title, author, ISBN, publication year)
+- List all books in a formatted table
+- Search a book by its ISBN
+- Update a book's title, author and publication year (ISBN stays fixed)
+- Delete a book with a YES confirmation
+- Input validation (no empty fields, valid year range, numeric menu choices)
+- Custom exceptions: BookNotFoundException, DuplicateIsbnException
 
-## 🛠️ Planned Technology Stack
-- **Backend:** Java 17, Spring Boot (REST APIs)
-- **Security:** Spring Security + JWT + Role-Based Access Control (ADMIN / STAFF)
-- **Data:** Spring Data JPA / Hibernate, MySQL (normalized, indexed)
-- **Testing:** JUnit 5, Mockito, Spring Boot Test
-- **DevOps:** Docker, GitHub Actions CI/CD
+## Project Structure
 
-## 📋 Design Patterns Applied
-Layered Architecture (MVC), Repository, Dependency Injection, Builder, Singleton, Factory, Strategy, Observer, DTO, and @ControllerAdvice.
+    src/main/java/com/library/
+    |-- Book.java                  - book entity (ISBN is the unique id)
+    |-- BookService.java           - CRUD logic, inventory stored in LinkedHashMap
+    |-- BookNotFoundException.java - thrown for unknown ISBNs
+    |-- DuplicateIsbnException.java- thrown when an ISBN already exists
+    |-- LibraryApp.java            - menu-driven CLI (main class)
 
-## 🗓️ Internship Timeline
-- **Week 1:** Project Planning & Architecture Design ✅ *(this repo)*
-- **Week 2:** Core module implementation (Product & Stock management)
-- **Week 3:** Order processing & security (JWT/RBAC)
-- **Week 4:** Reporting module & testing
-- **Week 5:** Deployment, documentation & final submission
+## Requirements
+
+- JDK 17 or newer (check with: java -version)
+
+## How to Compile
+
+From the project root folder (the folder that contains `src`):
+
+    javac -d out src/main/java/com/library/*.java
+
+This puts the compiled .class files into the `out` folder.
+
+## How to Run
+
+    java -cp out com.library.LibraryApp
+
+## How to Use
+
+The app shows a numbered menu. Type the number and press Enter:
+
+    1. Add a new book
+    2. List all books
+    3. Search book by ISBN
+    4. Update a book
+    5. Delete a book
+    0. Exit
+
+When updating a book, leave a field blank and press Enter to keep its
+current value.
+
+## Design Notes
+
+- Inventory is stored in a LinkedHashMap keyed by ISBN: fast lookups plus
+  predictable listing order.
+- ISBN is immutable after creation because it identifies the book.
+- All validation happens in LibraryApp; business rules (duplicates, missing
+  books) are enforced by BookService through custom exceptions.
