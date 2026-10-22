@@ -1,8 +1,8 @@
 # Library Book Inventory Manager
 
-Week 2 deliverable for the Junior Java Developer Internship - a menu-driven
-command-line Java application that manages a library's book inventory using
-in-memory Java collections.
+Junior Java Developer Internship project. A menu-driven command-line Java
+application that manages a library's book inventory using in-memory Java
+collections, with a JUnit 5 test suite added in Week 3.
 
 ## Features
 
@@ -13,50 +13,43 @@ in-memory Java collections.
 - Delete a book with a YES confirmation
 - Input validation (no empty fields, valid year range, numeric menu choices)
 - Custom exceptions: BookNotFoundException, DuplicateIsbnException
+- Case-insensitive ISBN matching (Week 3 bug fix)
 
 ## Project Structure
 
     src/main/java/com/library/
-    |-- Book.java                  - book entity (ISBN is the unique id)
-    |-- BookService.java           - CRUD logic, inventory stored in LinkedHashMap
-    |-- BookNotFoundException.java - thrown for unknown ISBNs
-    |-- DuplicateIsbnException.java- thrown when an ISBN already exists
-    |-- LibraryApp.java            - menu-driven CLI (main class)
+    |-- Book.java                   - book entity (ISBN is the unique id)
+    |-- BookService.java            - CRUD logic, LinkedHashMap storage (v1.1)
+    |-- BookNotFoundException.java  - thrown for unknown ISBNs
+    |-- DuplicateIsbnException.java - thrown when an ISBN already exists
+    |-- LibraryApp.java             - menu-driven CLI (main class)
+
+    src/test/java/com/library/
+    |-- BookServiceTest.java        - 12 unit tests for the CRUD service
+    |-- BookTest.java               - 3 entity contract tests
+    |-- LibraryAppTest.java         - 4 CLI tests (simulated keyboard input)
 
 ## Requirements
 
-- JDK 17 or newer (check with: java -version)
+- JDK 17 or newer
+- Maven 3.8 or newer (check with: mvn -version)
 
-## How to Compile
+## How to Compile and Run the App
 
-From the project root folder (the folder that contains `src`):
+    mvn compile
+    mvn exec:java -Dexec.mainClass=com.library.LibraryApp
 
-    javac -d out src/main/java/com/library/*.java
+(If you prefer plain javac: compile src/main/java/com/library/*.java with
+javac -d out, then run java -cp out com.library.LibraryApp.)
 
-This puts the compiled .class files into the `out` folder.
+## How to Run the Tests
 
-## How to Run
+    mvn test
 
-    java -cp out com.library.LibraryApp
+Expected result: 19 tests run, 0 failures, 0 errors.
 
-## How to Use
+## Week 3 Notes
 
-The app shows a numbered menu. Type the number and press Enter:
-
-    1. Add a new book
-    2. List all books
-    3. Search book by ISBN
-    4. Update a book
-    5. Delete a book
-    0. Exit
-
-When updating a book, leave a field blank and press Enter to keep its
-current value.
-
-## Design Notes
-
-- Inventory is stored in a LinkedHashMap keyed by ISBN: fast lookups plus
-  predictable listing order.
-- ISBN is immutable after creation because it identifies the book.
-- All validation happens in LibraryApp; business rules (duplicates, missing
-  books) are enforced by BookService through custom exceptions.
+See docs/Week3_Testing_Debugging_Report.docx for the full list of bugs
+found during testing, the debugging process, and the v1.1 refactor of
+BookService (ISBN normalisation).
