@@ -12,6 +12,7 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @DisplayName("LibraryApp command-line tests")
 class LibraryAppTest {
 
@@ -66,5 +67,13 @@ class LibraryAppTest {
         String output = runAppWith("1\nT\nA\nISBN-1\nnotANumber\n2005\n0\n");
         assertTrue(output.contains("not a valid number"));
         assertTrue(output.contains("Book added successfully."));
+    }
+
+    @Test
+    @DisplayName("keyword search finds a book added earlier in the same session")
+    void keywordSearchThroughMenu() {
+        String output = runAppWith(
+                "1\nClean Code\nRobert C. Martin\n9780132350884\n2008\n6\nclean\n0\n");
+        assertTrue(output.contains("1 match(es)"));
     }
 }
