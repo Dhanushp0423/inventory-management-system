@@ -33,12 +33,14 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("toString contains the ISBN, title and author")
-    void toStringContainsKeyFields() {
+    @DisplayName("toString columns line up with the shared table header")
+    void toStringMatchesTableHeader() {
         Book book = new Book("Clean Code", "Robert C. Martin", "9780132350884", 2008);
         String out = book.toString();
         assertTrue(out.contains("9780132350884"));
         assertTrue(out.contains("Clean Code"));
         assertTrue(out.contains("Robert C. Martin"));
+        // the header and every row must use the same column layout
+        assertEquals(Book.TABLE_HEADER.indexOf('|'), out.indexOf('|'));
     }
 }
