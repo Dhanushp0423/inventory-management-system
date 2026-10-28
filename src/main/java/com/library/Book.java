@@ -2,9 +2,17 @@ package com.library;
 
 public class Book {
 
+
+    public static final String TABLE_HEADER =
+            String.format("%-14s | %-28s | %-20s | %s", "ISBN", "TITLE", "AUTHOR", "YEAR");
+    public static final String TABLE_SEPARATOR =
+            "--------------------------------------------------------------------------------";
+
+    private static final String ROW_FORMAT = "%-14s | %-28s | %-20s | %d";
+
     private String title;
     private String author;
-    private final String isbn;        // unique key - fixed after creation
+    private final String isbn;
     private int publicationYear;
 
     public Book(String title, String author, String isbn, int publicationYear) {
@@ -30,7 +38,7 @@ public class Book {
         return publicationYear;
     }
 
-    // title, author and year can be edited later, ISBN cannot
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -43,10 +51,9 @@ public class Book {
         this.publicationYear = publicationYear;
     }
 
-    // formatted row used when printing the book list
+
     @Override
     public String toString() {
-        return String.format("%-14s | %-28s | %-20s | %d",
-                isbn, title, author, publicationYear);
+        return String.format(ROW_FORMAT, isbn, title, author, publicationYear);
     }
 }
