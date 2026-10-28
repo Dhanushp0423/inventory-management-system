@@ -7,9 +7,9 @@
 
     <groupId>com.library</groupId>
     <artifactId>library-inventory-cli</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
     <name>library-inventory-cli</name>
-    <description>Week 2 CLI app + Week 3 JUnit 5 test suite</description>
+    <description>Week 2 CLI app, Week 3 JUnit 5 test suite, Week 4 refactoring (v2.0)</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -36,4 +36,3 @@
         </plugins>
     </build>
 </project>
-
