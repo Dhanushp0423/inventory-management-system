@@ -81,6 +81,33 @@ class BookServiceTest {
         assertThrows(BookNotFoundException.class, () -> service.findByIsbn("NOPE-000"));
     }
 
+    @Test
+    @DisplayName("searchByKeyword finds a book by title fragment, ignoring case")
+    void keywordSearchMatchesTitle() {
+        service.addBook(sample);
+        service.addBook(new Book("Effective Java", "Joshua Bloch", "9780134685991", 2018));
+        List<Book> hits = service.searchByKeyword("clean");
+        assertEquals(1, hits.size());
+        assertEquals("9780132350884", hits.get(0).getIsbn());
+    }
+
+    @Test
+    @DisplayName("searchByKeyword finds a book by author fragment")
+    void keywordSearchMatchesAuthor() {
+        service.addBook(sample);
+        service.addBook(new Book("Effective Java", "Joshua Bloch", "9780134685991", 2018));
+        List<Book> hits = service.searchByKeyword("bloch");
+        assertEquals(1, hits.size());
+        assertEquals("Effective Java", hits.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("searchByKeyword returns an empty list when nothing matches")
+    void keywordSearchNoMatch() {
+        service.addBook(sample);
+        assertTrue(service.searchByKeyword("zzzz-not-present").isEmpty());
+    }
+
     // ---------- UPDATE ----------
 
     @Test
