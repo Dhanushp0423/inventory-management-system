@@ -1,5 +1,6 @@
 package com.library;
 
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +9,23 @@ import java.util.Scanner;
 
 public class LibraryApp {
 
-    private final BookService service = new BookService();
+    private final BookService service;
     private final ConsoleInput input = new ConsoleInput(new Scanner(System.in));
 
     private final Map<String, Runnable> menuActions = new LinkedHashMap<>();
     private boolean running = false;
 
+    /** Name of the environment variable that points at the CSV data file. */
+    public static final String DATA_FILE_ENV = "LIBRARY_DATA_FILE";
+
+    /** In-memory application (used by the tests and when no data file is configured). */
     public LibraryApp() {
+        this(new BookService());
+    }
+
+    /** Application wired to the given service (dependency injection, Week 5). */
+    public LibraryApp(BookService service) {
+        this.service = service;
         menuActions.put("1", this::addBook);
         menuActions.put("2", this::listBooks);
         menuActions.put("3", this::searchByIsbn);
@@ -24,8 +35,36 @@ public class LibraryApp {
         menuActions.put("0", this::exitApp);
     }
 
+    /**
+     * Entry point. Storage is chosen at start-up:
+     * {@code --data <file>} argument, else the LIBRARY_DATA_FILE environment variable,
+     * else in-memory only (nothing is saved).
+     */
     public static void main(String[] args) {
-        new LibraryApp().start();
+        String dataFile = resolveDataFile(args, System.getenv(DATA_FILE_ENV));
+        BookService service;
+        if (dataFile == null) {
+            service = new BookService();
+        } else {
+            try {
+                service = new BookService(new FileBookRepository(Path.of(dataFile)));
+                System.out.println("Using data file: " + Path.of(dataFile).toAbsolutePath());
+            } catch (RepositoryException e) {
+                System.err.println("Startup failed: " + e.getMessage());
+                System.exit(1);
+                return;
+            }
+        }
+        new LibraryApp(service).start();
+    }
+
+    static String resolveDataFile(String[] args, String envValue) {
+        for (int i = 0; i < args.length - 1; i++) {
+            if ("--data".equals(args[i])) {
+                return args[i + 1];
+            }
+        }
+        return (envValue == null || envValue.isBlank()) ? null : envValue;
     }
 
     public void start() {
@@ -37,7 +76,11 @@ public class LibraryApp {
         while (running) {
             printMenu();
             String choice = input.readRaw("Enter your choice: ").trim();
-            menuActions.getOrDefault(choice, this::invalidChoice).run();
+            try {
+                menuActions.getOrDefault(choice, this::invalidChoice).run();
+            } catch (RepositoryException e) {
+                System.out.println("Storage error: " + e.getMessage());
+            }
         }
     }
 

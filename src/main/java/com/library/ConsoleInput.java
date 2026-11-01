@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class ConsoleInput {
     private static final int MIN_YEAR = 1400;
-    private static final int MAX_YEAR = 2026;
+    private static final int MAX_YEAR = java.time.Year.now().getValue();
 
     private final Scanner scanner;
 

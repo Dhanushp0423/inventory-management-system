@@ -76,4 +76,13 @@ class LibraryAppTest {
                 "1\nClean Code\nRobert C. Martin\n9780132350884\n2008\n6\nclean\n0\n");
         assertTrue(output.contains("1 match(es)"));
     }
+
+    @Test
+    @DisplayName("--data argument wins over the environment variable; blank env means in-memory")
+    void dataFileResolution() {
+        assertEquals("a.csv", LibraryApp.resolveDataFile(new String[]{"--data", "a.csv"}, "b.csv"));
+        assertEquals("b.csv", LibraryApp.resolveDataFile(new String[0], "b.csv"));
+        assertNull(LibraryApp.resolveDataFile(new String[0], "  "));
+        assertNull(LibraryApp.resolveDataFile(new String[0], null));
+    }
 }

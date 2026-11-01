@@ -9,6 +9,20 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final Map<String, Book> books = new LinkedHashMap<>();
+    private final BookRepository repository;
+
+    /** In-memory service (Week 2-4 behaviour); nothing is saved between runs. */
+    public BookService() {
+        this(BookRepository.inMemory());
+    }
+
+    /** Service backed by a repository: existing data is loaded now, changes are saved as they happen. */
+    public BookService(BookRepository repository) {
+        this.repository = repository;
+        for (Book b : repository.loadAll()) {
+            books.put(normalizeIsbn(b.getIsbn()), b);
+        }
+    }
 
 
     public Book addBook(Book book) {
@@ -17,6 +31,7 @@ public class BookService {
             throw new DuplicateIsbnException(book.getIsbn());
         }
         books.put(key, book);
+        persist();
         return book;
     }
 
@@ -49,6 +64,7 @@ public class BookService {
         book.setTitle(title);
         book.setAuthor(author);
         book.setPublicationYear(year);
+        persist();
         return book;
     }
 
@@ -58,11 +74,16 @@ public class BookService {
         if (removed == null) {
             throw new BookNotFoundException(isbn);
         }
+        persist();
         return true;
     }
 
     public int count() {
         return books.size();
+    }
+
+    private void persist() {
+        repository.saveAll(books.values());
     }
 
     private String normalizeIsbn(String isbn) {
