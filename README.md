@@ -1,6 +1,6 @@
 # Library Book Inventory Manager
 
-A Java 17 and Maven-based Library Book Inventory Management System built as part of a five-week Java Developer Internship. This menu-driven command-line application supports complete book inventory CRUD operations, ISBN and keyword searching, input validation, and CSV-based file persistence. The project follows a layered design using service and repository components, includes automated JUnit 5 tests, and supports executable JAR packaging, Docker deployment, and GitHub Actions CI.
+A Java 17 and Maven-based Library Book Inventory Management System developed as part of a five-week Java Developer Internship. This menu-driven command-line application supports complete book inventory CRUD operations, ISBN and keyword searching, input validation, and CSV-based file persistence. The project follows a layered architecture using service and repository components, includes automated JUnit 5 tests, and supports executable JAR packaging, Docker deployment, and GitHub Actions CI.
 
 ## Features
 
