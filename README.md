@@ -1,11 +1,6 @@
 # Library Book Inventory Manager
 
-Junior Java Developer Internship project. A menu-driven command-line Java
-application that manages a library's book inventory using in-memory Java
-collections. Week 3 added a JUnit 5 test suite; Week 4 refactored the
-codebase to v2.0. Week 5 integrated everything into one deployable
-application (v3.0.0) with file persistence, an executable JAR, deployment
-scripts, Docker support and CI.
+A Java 17 and Maven-based Library Book Inventory Management System built as part of a five-week Java Developer Internship. This menu-driven command-line application supports complete book inventory CRUD operations, ISBN and keyword searching, input validation, and CSV-based file persistence. The project follows a layered design using service and repository components, includes automated JUnit 5 tests, and supports executable JAR packaging, Docker deployment, and GitHub Actions CI.
 
 ## Features
 
