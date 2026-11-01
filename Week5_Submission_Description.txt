@@ -1,0 +1,13 @@
+Week 5 – Integration, Deployment and Documentation (Library Inventory Management System, v3.0.0)
+
+For the final week I consolidated the work from Weeks 1 to 4 into a single, deployable Java application and wrote the developer handover documentation. The project is a menu-driven Java 17 / Maven application that manages a library catalogue (add, list, search by ISBN, keyword search, update, delete). Weeks 1-4 covered design, implementation, a JUnit 5 test suite and a refactoring pass; Week 5 made it production-ready.
+
+Integration: I reviewed the existing modules and fixed the main integration weaknesses. Data used to live only in memory, so I introduced a BookRepository interface and a FileBookRepository that stores the catalogue in a CSV file with atomic writes and proper escaping. BookService and LibraryApp now receive their dependencies through constructors, so storage can be swapped without changing business logic, and the older no-argument constructors keep all earlier tests valid. Storage location is configurable with a --data argument or the LIBRARY_DATA_FILE variable. I also replaced the hard-coded maximum year with the current year and added a RepositoryException so file problems are reported clearly instead of crashing the program.
+
+Deployment: the Maven build now creates an executable JAR. I wrote build.sh, run.sh, run.bat and package.sh, which produce a release bundle (JAR, scripts, README, docs). I added a multi-stage Dockerfile with a data volume and a GitHub Actions workflow that builds, tests and packages on every push. I verified the packaged JAR end to end: data persisted across restarts, special characters were preserved, and a corrupted data file stopped start-up with a clear error.
+
+Testing: I added 6 new tests (persistence and configuration), bringing the suite to 29 tests.
+
+Documentation: the attached Word document (about 2,700 words) covers the architecture, technologies, the integration issues and fixes, build and packaging steps, three deployment options, troubleshooting, backup and recovery, testing, how to extend the application (new menu options, a database repository, a REST API), and a maintenance and scalability plan.
+
+GitHub: https://github.com/Dhanushp0423/inventory-management-system
